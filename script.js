@@ -1,555 +1,503 @@
 /* ==========================================================================
-   ANSH PORTFOLIO - CYBERSECURITY & AUTOMATION BEHAVIOR LOGIC (script.js)
+   ANSH PORTFOLIO - 8-BIT RETRO ARCADE BEHAVIOR LOGIC (script.js)
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Core State
-    let systemSoundEnabled = false;
-    let systemOverclocked = false;
-    let matrixRainInterval = null;
-    let matrixCanvas = null;
+    // 1. System Sound state
+    let soundEnabled = false;
+    let overloadMode = false;
 
     // Elements
     const body = document.body;
-    const navLinks = document.querySelectorAll('.nav-link');
-    const sections = document.querySelectorAll('.section-container');
-    
-    // Audio Elements
-    const audioClick = document.getElementById('audio-click');
-    const audioKeystroke = document.getElementById('audio-keystroke');
-    const audioSuccess = document.getElementById('audio-success');
-    const audioHologram = document.getElementById('audio-hologram');
+    const navLinks = document.querySelectorAll('.arcade-nav-link');
+    const sections = document.querySelectorAll('.arcade-section');
+    const btnSound = document.getElementById('btn-retro-sound');
+    const btnSelfDestruct = document.getElementById('btn-self-destruct');
 
-    // Controls
-    const btnSound = document.getElementById('btn-sound');
-    const btnTheme = document.getElementById('btn-theme');
-    const btnOverclock = document.getElementById('btn-overclock');
-    const integrityValue = document.getElementById('integrity-value');
+    // Audio Assets
+    const audioCoin = document.getElementById('audio-coin');
+    const audioJump = document.getElementById('audio-jump');
+    const audioHit = document.getElementById('audio-hit');
+    const audioOver = document.getElementById('audio-over');
+    const audioSelect = document.getElementById('audio-select');
 
-    // Terminal Elements
-    const consoleInput = document.getElementById('console-input');
-    const consoleHistory = document.getElementById('console-history');
-    const consoleBody = document.getElementById('console-body');
+    // Stats
+    const hpValue = document.querySelector('.stat-row:nth-child(1) .stat-num');
+    const hpBar = document.querySelector('.stat-row:nth-child(1) .stat-bar');
 
-    // Playback Scanner Elements
-    const playgroundInput = document.getElementById('playground-input');
-    const btnRunScan = document.getElementById('btn-run-scan');
-    const scanStatus = document.getElementById('scan-status');
-    const scanResultsContainer = document.getElementById('scan-results-container');
-    const presetHeadersBtn = document.getElementById('preset-headers');
-    const presetSecretsBtn = document.getElementById('preset-secrets');
-
-    // Custom helper to play sound checks
-    function playSound(audio) {
-        if (systemSoundEnabled && audio) {
+    // Helper to play sound
+    function playAudio(audio) {
+        if (soundEnabled && audio) {
             audio.currentTime = 0;
-            audio.play().catch(e => console.log("Audio playback blocked", e));
+            audio.play().catch(e => console.log("Audio play blocked", e));
         }
     }
 
-    // 2. Navigation / Tab Switching
+    // 2. Navigation Tabs
     navLinks.forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
-            playSound(audioClick);
+            playAudio(audioSelect);
             
-            // Remove active from all nav links
             navLinks.forEach(l => l.classList.remove('active'));
-            // Add active to clicked link
             link.classList.add('active');
 
-            // Hide all sections
-            sections.forEach(sec => sec.classList.remove('active-section'));
-
-            // Show corresponding section
+            sections.forEach(s => s.classList.remove('active-section'));
             const targetId = link.getAttribute('href').substring(1);
             const targetSection = document.getElementById(targetId);
             if (targetSection) {
                 targetSection.classList.add('active-section');
-                
-                // Focus terminal if switched to console
-                if (targetId === 'console-section' && consoleInput) {
-                    setTimeout(() => consoleInput.focus(), 100);
-                }
             }
         });
     });
 
-    // 3. Audio & Control Toggles
+    // 3. Sound & System Controls
     btnSound.addEventListener('click', () => {
-        systemSoundEnabled = !systemSoundEnabled;
-        if (systemSoundEnabled) {
+        soundEnabled = !soundEnabled;
+        if (soundEnabled) {
             btnSound.innerHTML = '<i class="fa-solid fa-volume-high text-green"></i>';
-            btnSound.classList.add('pulse');
-            playSound(audioSuccess);
-            audioHologram.volume = 0.15;
-            audioHologram.play().catch(e => console.log("Ambient sound blocked", e));
+            playAudio(audioCoin);
         } else {
             btnSound.innerHTML = '<i class="fa-solid fa-volume-xmark"></i>';
-            btnSound.classList.remove('pulse');
-            audioHologram.pause();
         }
     });
 
-    // Theme (Matrix View Switcher) - toggling bright tactical grid versus default deep dark
-    btnTheme.addEventListener('click', () => {
-        playSound(audioClick);
-        body.classList.toggle('light-theme');
-        if (body.classList.contains('light-theme')) {
-            btnTheme.innerHTML = '<i class="fa-solid fa-eye text-cyan"></i>';
+    btnSelfDestruct.addEventListener('click', () => {
+        overloadMode = !overloadMode;
+        body.classList.toggle('overload-mode');
+        playAudio(audioHit);
+
+        if (overloadMode) {
+            btnSelfDestruct.textContent = "NORMALIZE";
+            btnSelfDestruct.classList.add('blink-text');
+            if (hpValue && hpBar) {
+                hpValue.textContent = "01/100";
+                hpBar.style.width = "1%";
+            }
         } else {
-            btnTheme.innerHTML = '<i class="fa-solid fa-eye-slash"></i>';
+            btnSelfDestruct.textContent = "OVERLOAD";
+            btnSelfDestruct.classList.remove('blink-text');
+            if (hpValue && hpBar) {
+                hpValue.textContent = "100/100";
+                hpBar.style.width = "100%";
+            }
         }
     });
 
-    // Overclock Easter Egg
-    btnOverclock.addEventListener('click', () => {
-        systemOverclocked = !systemOverclocked;
-        body.classList.toggle('overclock-mode');
-        playSound(audioSuccess);
-
-        if (systemOverclocked) {
-            btnOverclock.textContent = "DE-CLOCK";
-            btnOverclock.classList.add('pulse');
-            integrityValue.textContent = "138% OVERHEAT";
-            integrityValue.className = "value pulse text-cyan"; // in overclock it displays neon red due to class mapping overrides
-            
-            // Random fluctuating integrity interval
-            const integrityInterval = setInterval(() => {
-                if (!systemOverclocked) {
-                    clearInterval(integrityInterval);
-                    return;
-                }
-                const randomVal = 130 + Math.floor(Math.random() * 20);
-                integrityValue.textContent = `${randomVal}% CORE_TEMP`;
-            }, 1000);
-        } else {
-            btnOverclock.textContent = "OVERCLOCK";
-            btnOverclock.classList.remove('pulse');
-            integrityValue.textContent = "100%";
-            integrityValue.className = "value pulse text-green";
-        }
-    });
-
-    // 4. Terminal Command Interpreter
-    const commands = {
-        help: () => {
-            return `Available system routines:
-  about    - Details on who I am and my engineering focus
-  skills   - Technical skills mapping and ECE application vectors
-  projects - Listing of security automation repositories
-  contact  - Links to reach the system administrator
-  matrix   - Triggers terminal digital rain visualization
-  hack     - Execute standard vulnerability diagnostic script
-  clear    - Clear console screen history`;
+    // 4. Inventory Inspect System
+    const inventoryData = {
+        'item-python': {
+            title: "Python Blade // Weapon Loadout",
+            stats: "Attack Power: +99 Automation | Mana: -12 Flasks",
+            desc: "A custom weapon forged to automate recon loops. Integrated functions support async subdomain resolving, web-crawler mapping, and raw packet validation. Bypasses repetitive manual tests completely."
         },
-        about: () => {
-            return `[IDENTITY MODULE: ANSH]
-------------------------------------------------------
-ROLE:     2nd Year B.Tech Student (ECE-ACT)
-CAMPUS:   Maharaja Agrasen Institute of Technology (MAIT), Delhi
-MAJORS:   Electronics and Communication Engineering (Advanced Communication Tech)
-FOCUS:    Cybersecurity, Penetration Testing, Automation Systems, Scripting
-MINDSET:  Vibecoder. Focused on code logic flows, protocol security analysis,
-          and building automated solutions instead of simply running tools.`;
+        'item-bash': {
+            title: "Bash Shield // System Guard",
+            stats: "Defense Power: +85 Shell-Speed | CoolDown: 2s",
+            desc: "Formulated to automate local environments. Scrapes files using custom pipelines, sweeps configurations, and logs summaries straight into markdown structures."
         },
-        skills: () => {
-            return `[SPECIALIZATIONS MATRIX]
-------------------------------------------------------
-• Cyber Security & Web Auditing [████████░░] 80%
-  - Web applications testing, Network packet tracing, Phishing defense simulation
-• Automation & Scripting       [█████████░] 90%
-  - Python security wrappers, asynchronous logic, Bash scripts, custom regex engines
-• ECE-ACT Network Security     [███████░░░] 70%
-  - RF packet capture analysis, Software Defined Radio (SDR) exploits, hardware channels`;
+        'item-websec': {
+            title: "Web Sec Scroll // Spellbook",
+            stats: "Spell Power: +80 Analysis | Mana: -40 MP",
+            desc: "Casts deep heuristic scans across logical web layers. Dissects HTTP headers (CSP, HSTS, X-Frame), checks cookie parameters, and targets authorization bypass configurations."
         },
-        projects: () => {
-            return `[PROJECT PIPELINES]
-------------------------------------------------------
-1. Subdomain Sentinel  - Async Python script targeting asset enumerations
-2. VulnScanner Pipeline - Automated Bash workflow scheduling local diagnostics
-3. RF Packet Sniffer    - ECE Hardware SDR integration logging local radio packet structures
-4. VibeSinks Audit      - Static analysis utility grep scanning codebases for API issues
-
-Type command 'hack' to simulate a diagnostic scan on a test target!`;
-        },
-        contact: () => {
-            return `[COMMUNICATION CHANNELS]
-------------------------------------------------------
-GitHub Profile:   https://github.com/anshk011
-Email Address:    ansh@mait-act.edu.in
-Node Location:    Delhi, India
-
-Feel free to connect or open issues on my automation repositories!`;
-        },
-        clear: () => {
-            consoleHistory.innerHTML = '';
-            return '';
+        'item-eceact': {
+            title: "RF Transmitter // Engineering Relic",
+            stats: "Frequence Capture: +75 SDR | Hardware: ECE-ACT Spec",
+            desc: "Designed at the intersection of communication signals and cybersecurity. Inspects local radio waves, audits IoT wireless encryptions, and maps protocol boundaries."
         }
     };
 
-    // Keystroke sound handler
-    consoleInput.addEventListener('keydown', (e) => {
-        if (e.key !== 'Enter' && e.key !== 'Shift' && e.key !== 'Control') {
-            playSound(audioKeystroke);
-        }
+    const itemCards = document.querySelectorAll('.item-card');
+    const inspectHeader = document.getElementById('inspect-header');
+    const inspectContent = document.getElementById('inspect-content');
+
+    itemCards.forEach(card => {
+        const handler = () => {
+            const data = inventoryData[card.id];
+            if (data && inspectHeader && inspectContent) {
+                playAudio(audioSelect);
+                inspectHeader.innerHTML = `DATABASE RETRIEVED: <span class="text-yellow">${data.title}</span>`;
+                inspectContent.innerHTML = `
+                    <p class="text-green font-retro" style="font-size: 1.1rem; margin-bottom: 0.5rem;">${data.stats}</p>
+                    <p class="text-white">${data.desc}</p>
+                `;
+            }
+        };
+        card.addEventListener('mouseenter', handler);
+        card.addEventListener('click', handler);
     });
 
-    consoleInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            const inputVal = consoleInput.value.trim();
-            consoleInput.value = '';
-            
-            if (inputVal === '') return;
+    // 5. Playable Canvas Game: "BUG HUNTER"
+    const canvas = document.getElementById('game-canvas');
+    const ctx = canvas ? canvas.getContext('2d') : null;
+    
+    // Game state elements
+    const screenInsertCoin = document.getElementById('screen-insert-coin');
+    const screenGame = document.getElementById('screen-game');
+    const screenGameOver = document.getElementById('screen-game-over');
+    const gameScoreDisplay = document.getElementById('game-score');
+    const gameLivesDisplay = document.getElementById('game-lives');
+    const finalScoreDisplay = document.getElementById('final-score');
+    const highScoreDisplay = document.getElementById('high-score');
+    
+    const btnInsertCoin = document.getElementById('btn-insert-coin');
+    const btnGameRetry = document.getElementById('btn-game-retry');
+    
+    // Joystick elements
+    const joystickKnob = document.getElementById('joystick-knob');
+    const ctrlLeft = document.getElementById('ctrl-left');
+    const ctrlRight = document.getElementById('ctrl-right');
+    const ctrlAction = document.getElementById('ctrl-action');
 
-            // Stop matrix rain if active
-            stopMatrixRain();
+    let gameRunning = false;
+    let score = 0;
+    let lives = 3;
+    let highscore = parseInt(localStorage.getItem('ansh_arcade_highscore') || '0');
+    
+    // Game objects
+    let player = {
+        x: 0,
+        y: 0,
+        width: 60,
+        height: 12,
+        speed: 8
+    };
 
-            // Print command command line to history
-            const userLine = document.createElement('div');
-            userLine.className = 'console-line';
-            userLine.innerHTML = `<span class="prompt">guest@anshk011:~ $</span> <span class="text-white">${escapeHtml(inputVal)}</span>`;
-            consoleHistory.appendChild(userLine);
+    let projectiles = [];
+    let projectileSpawnTimer = 0;
+    let keyState = {};
 
-            const parts = inputVal.toLowerCase().split(' ');
-            const cmd = parts[0];
+    // Setup canvas sizing
+    function resizeCanvas() {
+        if (canvas) {
+            canvas.width = canvas.parentElement.clientWidth - 32;
+            canvas.height = canvas.parentElement.clientHeight - 60;
+            player.x = canvas.width / 2 - player.width / 2;
+            player.y = canvas.height - 25;
+        }
+    }
+    
+    window.addEventListener('resize', resizeCanvas);
 
-            let response = '';
-            if (cmd === 'clear') {
-                commands.clear();
-                playSound(audioSuccess);
-                return;
-            } else if (cmd === 'matrix') {
-                startMatrixRain();
-                response = 'Matrix rain initialized. Type any command to close.';
-                playSound(audioSuccess);
-            } else if (cmd === 'hack') {
-                simulateSecurityScan();
-                playSound(audioSuccess);
-                return;
-            } else if (commands[cmd]) {
-                response = commands[cmd]();
-                playSound(audioSuccess);
+    // Initial load highscore display
+    if (highScoreDisplay) {
+        highScoreDisplay.textContent = highscore;
+    }
+
+    // Keyboard handlers
+    window.addEventListener('keydown', (e) => {
+        keyState[e.key] = true;
+    });
+    window.addEventListener('keyup', (e) => {
+        keyState[e.key] = false;
+    });
+
+    // Mobile buttons handlers
+    let leftInterval, rightInterval;
+    if (ctrlLeft && ctrlRight) {
+        ctrlLeft.addEventListener('mousedown', () => {
+            keyState['ArrowLeft'] = true;
+            playAudio(audioSelect);
+        });
+        ctrlLeft.addEventListener('mouseup', () => { keyState['ArrowLeft'] = false; });
+        ctrlLeft.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            keyState['ArrowLeft'] = true;
+            playAudio(audioSelect);
+        });
+        ctrlLeft.addEventListener('touchend', () => { keyState['ArrowLeft'] = false; });
+
+        ctrlRight.addEventListener('mousedown', () => {
+            keyState['ArrowRight'] = true;
+            playAudio(audioSelect);
+        });
+        ctrlRight.addEventListener('mouseup', () => { keyState['ArrowRight'] = false; });
+        ctrlRight.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            keyState['ArrowRight'] = true;
+            playAudio(audioSelect);
+        });
+        ctrlRight.addEventListener('touchend', () => { keyState['ArrowRight'] = false; });
+    }
+
+    if (ctrlAction) {
+        ctrlAction.addEventListener('click', () => {
+            playAudio(audioJump);
+            // Action button triggers a brief shield visual or score bonus if game is running
+            if (gameRunning) {
+                player.width = 100; // Power Up shield!
+                setTimeout(() => { player.width = 60; }, 1000);
+            }
+        });
+    }
+
+    // Interactive Joystick Knob Dragging
+    if (joystickKnob) {
+        let isDraggingJoystick = false;
+        let startX = 0;
+
+        joystickKnob.addEventListener('mousedown', (e) => {
+            isDraggingJoystick = true;
+            startX = e.clientX;
+            joystickKnob.style.cursor = 'grabbing';
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (!isDraggingJoystick) return;
+            const diffX = e.clientX - startX;
+            // Limit joystick travel to 20px left/right
+            const limitedDiff = Math.max(-20, Math.min(20, diffX));
+            joystickKnob.style.transform = `translate(${limitedDiff}px, 0)`;
+
+            if (limitedDiff < -5) {
+                keyState['ArrowLeft'] = true;
+                keyState['ArrowRight'] = false;
+            } else if (limitedDiff > 5) {
+                keyState['ArrowRight'] = true;
+                keyState['ArrowLeft'] = false;
             } else {
-                response = `bash: command not found: ${escapeHtml(cmd)}. Type 'help' to review directory routines.`;
+                keyState['ArrowLeft'] = false;
+                keyState['ArrowRight'] = false;
             }
+        });
 
-            if (response !== '') {
-                const responseLine = document.createElement('div');
-                responseLine.className = 'console-line text-muted';
-                responseLine.innerHTML = response.replace(/\n/g, '<br>');
-                consoleHistory.appendChild(responseLine);
+        window.addEventListener('mouseup', () => {
+            if (isDraggingJoystick) {
+                isDraggingJoystick = false;
+                joystickKnob.style.transform = `translate(0, 0)`;
+                joystickKnob.style.cursor = 'grab';
+                keyState['ArrowLeft'] = false;
+                keyState['ArrowRight'] = false;
             }
+        });
 
-            // Scroll to bottom
-            consoleBody.scrollTop = consoleBody.scrollHeight;
-        }
-    });
+        // Touch support for Joystick
+        joystickKnob.addEventListener('touchstart', (e) => {
+            isDraggingJoystick = true;
+            startX = e.touches[0].clientX;
+        });
 
-    // Helper to prevent HTML injections in terminal logs
-    function escapeHtml(text) {
-        return text
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
+        window.addEventListener('touchmove', (e) => {
+            if (!isDraggingJoystick) return;
+            const diffX = e.touches[0].clientX - startX;
+            const limitedDiff = Math.max(-20, Math.min(20, diffX));
+            joystickKnob.style.transform = `translate(${limitedDiff}px, 0)`;
+
+            if (limitedDiff < -5) {
+                keyState['ArrowLeft'] = true;
+                keyState['ArrowRight'] = false;
+            } else if (limitedDiff > 5) {
+                keyState['ArrowRight'] = true;
+                keyState['ArrowLeft'] = false;
+            } else {
+                keyState['ArrowLeft'] = false;
+                keyState['ArrowRight'] = false;
+            }
+        });
+
+        window.addEventListener('touchend', () => {
+            if (isDraggingJoystick) {
+                isDraggingJoystick = false;
+                joystickKnob.style.transform = `translate(0, 0)`;
+                keyState['ArrowLeft'] = false;
+                keyState['ArrowRight'] = false;
+            }
+        });
     }
 
-    // 5. Matrix Code Rain Simulator (Easter Egg)
-    function startMatrixRain() {
-        stopMatrixRain();
+    // Start Game Function
+    function startGame() {
+        playAudio(audioCoin);
+        resizeCanvas();
         
-        matrixCanvas = document.createElement('canvas');
-        matrixCanvas.id = 'matrix-canvas';
-        matrixCanvas.style.position = 'absolute';
-        matrixCanvas.style.top = '0';
-        matrixCanvas.style.left = '0';
-        matrixCanvas.style.width = '100%';
-        matrixCanvas.style.height = '100%';
-        matrixCanvas.style.opacity = '0.15';
-        matrixCanvas.style.pointerEvents = 'none';
-        consoleBody.appendChild(matrixCanvas);
-
-        const ctx = matrixCanvas.getContext('2d');
+        // Update screens
+        screenInsertCoin.classList.remove('active-screen');
+        screenGameOver.classList.remove('active-screen');
+        screenGame.classList.add('active-screen');
         
-        // Match sizing
-        matrixCanvas.width = consoleBody.clientWidth;
-        matrixCanvas.height = consoleBody.clientHeight;
-
-        const columns = Math.floor(matrixCanvas.width / 16);
-        const yPositions = Array(columns).fill(0);
+        score = 0;
+        lives = 3;
+        projectiles = [];
+        projectileSpawnTimer = 0;
+        gameRunning = true;
         
-        matrixRainInterval = setInterval(() => {
-            ctx.fillStyle = 'rgba(5, 6, 8, 0.05)';
-            ctx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
-            
-            ctx.fillStyle = '#00ff66';
-            ctx.font = '14px Courier New';
-            
-            for (let i = 0; i < yPositions.length; i++) {
-                const char = String.fromCharCode(33 + Math.floor(Math.random() * 93));
-                const x = i * 16;
-                const y = yPositions[i];
-                
-                ctx.fillText(char, x, y);
-                
-                if (y > 100 + Math.random() * 10000) {
-                    yPositions[i] = 0;
-                } else {
-                    yPositions[i] += 16;
-                }
-            }
-        }, 33);
+        updateHUD();
+        requestAnimationFrame(gameLoop);
     }
 
-    function stopMatrixRain() {
-        if (matrixRainInterval) {
-            clearInterval(matrixRainInterval);
-            matrixRainInterval = null;
+    function updateHUD() {
+        if (gameScoreDisplay) {
+            gameScoreDisplay.textContent = score.toString().padStart(5, '0');
         }
-        if (matrixCanvas && matrixCanvas.parentNode) {
-            matrixCanvas.parentNode.removeChild(matrixCanvas);
-            matrixCanvas = null;
+        if (gameLivesDisplay) {
+            gameLivesDisplay.textContent = '❤'.repeat(lives);
         }
     }
 
-    // 6. Mock Hack Automation Process
-    function simulateSecurityScan() {
-        const lines = [
-            "Initiating remote vulnerability probe...",
-            "Resolving target domain [sandbox.mait-act.edu.in] -> 192.168.43.10",
-            "Port scanning: TCP 80, 443, 8080 (Filtered)",
-            "Auditing security handshake certificates...",
-            "Injecting pilot payloads into endpoint /api/v1/auth/reset...",
-            "Analyzing API state latency for timing race conditions...",
-            "WARNING: Host header validation missing on password reset callback.",
-            "WARNING: Hardcoded JWT sign signature detected on client side bundle.",
-            "Compilation diagnostic completed. 2 vulnerabilities cataloged.",
-            "Run 'help' for directory menus."
-        ];
-
-        let index = 0;
+    // Core Game Loop
+    function gameLoop() {
+        if (!gameRunning) return;
         
-        function printNextLine() {
-            if (index < lines.length) {
-                const lineDiv = document.createElement('div');
-                lineDiv.className = 'console-line';
-                
-                if (lines[index].includes("WARNING")) {
-                    lineDiv.className += ' text-yellow';
-                } else if (lines[index].includes("completed")) {
-                    lineDiv.className += ' text-green';
-                } else {
-                    lineDiv.className += ' text-muted';
-                }
-                
-                lineDiv.textContent = `[AUDIT] ${lines[index]}`;
-                consoleHistory.appendChild(lineDiv);
-                
-                playSound(audioKeystroke);
-                consoleBody.scrollTop = consoleBody.scrollHeight;
-                
-                index++;
-                setTimeout(printNextLine, 400 + Math.random() * 300);
-            }
-        }
-        printNextLine();
+        update();
+        draw();
+        
+        requestAnimationFrame(gameLoop);
     }
 
-    // 7. Security Lab Automated Regex Scanner
-    // Presets
-    const headerPreset = `HTTP/1.1 200 OK
-Server: nginx/1.18.0 (Ubuntu)
-Content-Type: text/html; charset=UTF-8
-Connection: keep-alive
-Keep-Alive: timeout=5
-X-Powered-By: Express
-
-# No HSTS, No Content-Security-Policy headers found.
-# Running standard staging environment.`;
-
-    const codePreset = `// Connection string configuration
-const database_uri = "mongodb://admin:p@ssword123@mait-cluster.act-telecom.net:27017/prod_db";
-const JWT_SECRET = "super_vibecoder_secret_signature_key_2026";
-
-function authenticateUser(req, res) {
-    const raw_query = "SELECT * FROM users WHERE username = '" + req.body.user + "' AND password = '" + req.body.pwd + "'";
-    // TODO: Migrate MD5 checks to PBKDF2 later
-    const password_hash = md5(req.body.pwd);
-}`;
-
-    presetHeadersBtn.addEventListener('click', () => {
-        playgroundInput.value = headerPreset;
-        playSound(audioClick);
-    });
-
-    presetSecretsBtn.addEventListener('click', () => {
-        playgroundInput.value = codePreset;
-        playSound(audioClick);
-    });
-
-    // Scanner logic
-    btnRunScan.addEventListener('click', () => {
-        const input = playgroundInput.value.trim();
-        if (!input) {
-            alert("Please paste configuration code or headers to execute scan.");
-            return;
+    function update() {
+        // Player Movement
+        if (keyState['ArrowLeft'] || keyState['a']) {
+            player.x = Math.max(0, player.x - player.speed);
         }
-
-        playSound(audioClick);
+        if (keyState['ArrowRight'] || keyState['d']) {
+            player.x = Math.min(canvas.width - player.width, player.x + player.speed);
+        }
         
-        // Reset output to scanning status
-        scanStatus.textContent = "Scanning...";
-        scanStatus.className = "status-tag scanning";
-        scanResultsContainer.innerHTML = `
-            <div class="diagnostic-empty">
-                <i class="fa-solid fa-sync fa-spin pulse-radar"></i>
-                <p class="text-cyan">Executing pattern recognition heuristics...</p>
-                <p class="text-muted text-small">Parsing inputs for hardcoded secrets, cryptographic weaknesses, and misconfigured HTTP variables.</p>
-            </div>
-        `;
-
-        // Simulate script scan time delay
-        setTimeout(() => {
-            const findings = performRegexAnalysis(input);
-            displayScanFindings(findings);
-        }, 1500);
-    });
-
-    function performRegexAnalysis(text) {
-        const findings = [];
-        
-        // 1. Check Hardcoded Secrets
-        const secretRegexes = [
-            { pattern: /(password|passwd|pwd|pass)\s*=\s*['"][^'"]+['"]/i, name: "Hardcoded Credential Exposure", desc: "Detected plain-text password assignation variable.", severity: "HIGH" },
-            { pattern: /(secret|signature|private_key|token)\s*=\s*['"][^'"]{8,}['"]/i, name: "Hardcoded Cryptographic Token", desc: "Leaked signing signature keys inside client script logs.", severity: "HIGH" },
-            { pattern: /mongodb:\/\/[^:]+:[^@]+@/i, name: "Database Connection URI Leak", desc: "Database credentials embedded directly inside connection strings.", severity: "HIGH" }
-        ];
-
-        // 2. Check Cryptographic Vulnerabilities
-        const cryptoRegexes = [
-            { pattern: /md5\s*\(/i, name: "Insecure Hash Routine (MD5)", desc: "MD5 algorithms are highly susceptible to collision attacks. Migrate hashes to PBKDF2/bcrypt.", severity: "MEDIUM" },
-            { pattern: /sha1\s*\(/i, name: "Weak Hash Routine (SHA-1)", desc: "SHA-1 signatures are deprecated. Migrate checksum structures to SHA-256.", severity: "LOW" }
-        ];
-
-        // 3. Check Web API / SQL vulnerabilities
-        const injectionRegexes = [
-            { pattern: /SELECT\s+.*\s+FROM\s+.*\s+WHERE\s+.*['"]\s*\+\s*\w+/i, name: "Direct Concatenation in SQL Query", desc: "Risk of SQL Injection. Utilize parameterized queries or ORM frameworks to prevent bypasses.", severity: "HIGH" }
-        ];
-
-        // 4. Check Missing HTTP Headers (If input contains HTTP Header structure)
-        const isHeaderInput = text.includes("HTTP/") || text.includes("Server:") || text.includes("Content-Type:");
-        
-        if (isHeaderInput) {
-            const headers = [
-                { header: "Strict-Transport-Security", name: "Missing HSTS Header", desc: "HSTS prevents downgrade protocol interceptions (man-in-the-middle).", severity: "MEDIUM" },
-                { header: "Content-Security-Policy", name: "Missing Content Security Policy (CSP)", desc: "Without CSP, the app is vulnerable to malicious script injections (XSS).", severity: "HIGH" },
-                { header: "X-Frame-Options", name: "Missing Clickjacking Guard (X-Frame-Options)", desc: "Allows domain overlaying. Restrict frame loadings using DENY or SAMEORIGIN.", severity: "MEDIUM" },
-                { header: "X-Content-Type-Options", name: "Missing Mime-Sniffing Guard", desc: "Ensures browser respects defined script files. Add header value 'nosniff'.", severity: "LOW" }
-            ];
-
-            headers.forEach(h => {
-                const regex = new RegExp(h.header, "i");
-                if (!regex.test(text)) {
-                    findings.push({ name: h.name, desc: h.desc, severity: h.severity });
-                }
+        // Spawn projectiles (bugs / firewalls)
+        projectileSpawnTimer++;
+        if (projectileSpawnTimer > 35) { // every 35 ticks
+            projectileSpawnTimer = 0;
+            const isFirewall = Math.random() < 0.35; // 35% chance firewall
+            projectiles.push({
+                x: Math.random() * (canvas.width - 20),
+                y: -20,
+                width: 20,
+                height: 20,
+                speed: 3 + Math.random() * 4,
+                isFirewall: isFirewall
             });
+        }
+        
+        // Update Projectiles
+        for (let i = projectiles.length - 1; i >= 0; i--) {
+            let p = projectiles[i];
+            p.y += p.speed;
+            
+            // Collision Detection
+            if (p.x < player.x + player.width &&
+                p.x + p.width > player.x &&
+                p.y < player.y + player.height &&
+                p.y + p.height > player.y) {
+                
+                // Collision!
+                projectiles.splice(i, 1);
+                
+                if (p.isFirewall) {
+                    lives--;
+                    playAudio(audioHit);
+                    updateHUD();
+                    
+                    // Trigger dynamic screen shake class temporarily
+                    body.classList.add('overload-mode');
+                    setTimeout(() => {
+                        if (!overloadMode) body.classList.remove('overload-mode');
+                    }, 200);
 
-            // Server Banner Leak check
-            if (/Server:\s*\w+/i.test(text)) {
-                findings.push({
-                    name: "Server Version Banner Leak",
-                    desc: "Disclosing exact server stacks (e.g. nginx/1.18.0) simplifies cataloging vulnerabilities for exploit targeting.",
-                    severity: "LOW"
-                });
+                    if (lives <= 0) {
+                        endGame();
+                    }
+                } else {
+                    score += 10;
+                    playAudio(audioJump);
+                    updateHUD();
+                }
+                continue;
+            }
+            
+            // Out of bounds
+            if (p.y > canvas.height) {
+                projectiles.splice(i, 1);
             }
         }
-
-        // Run non-header checks
-        secretRegexes.forEach(rule => {
-            if (rule.pattern.test(text)) findings.push({ name: rule.name, desc: rule.desc, severity: rule.severity });
-        });
-
-        cryptoRegexes.forEach(rule => {
-            if (rule.pattern.test(text)) findings.push({ name: rule.name, desc: rule.desc, severity: rule.severity });
-        });
-
-        injectionRegexes.forEach(rule => {
-            if (rule.pattern.test(text)) findings.push({ name: rule.name, desc: rule.desc, severity: rule.severity });
-        });
-
-        return findings;
     }
 
-    function displayScanFindings(findings) {
-        scanResultsContainer.innerHTML = '';
+    function draw() {
+        if (!ctx) return;
         
-        if (findings.length === 0) {
-            scanStatus.textContent = "Stable";
-            scanStatus.className = "status-tag active";
-            scanResultsContainer.innerHTML = `
-                <div class="diagnostic-empty">
-                    <i class="fa-solid fa-shield-halved text-green pulse-radar"></i>
-                    <p class="text-green">Diagnostic Auditing Passed</p>
-                    <p class="text-muted text-small">No direct security warnings matching core regex structures detected.</p>
-                </div>
-            `;
-            playSound(audioSuccess);
-            return;
-        }
-
-        // Aggregate severity counts
-        const highCount = findings.filter(f => f.severity === 'HIGH').length;
-        const mediumCount = findings.filter(f => f.severity === 'MEDIUM').length;
+        // Clear canvas
+        ctx.fillStyle = '#07040f';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
         
-        if (highCount > 0) {
-            scanStatus.textContent = `${findings.length} Vulnerabilities`;
-            scanStatus.className = "status-tag";
-            scanStatus.style.backgroundColor = "rgba(255, 51, 102, 0.2)";
-            scanStatus.style.color = "var(--cyber-red)";
-            scanStatus.style.border = "1px solid var(--cyber-red)";
-        } else if (mediumCount > 0) {
-            scanStatus.textContent = `${findings.length} Warnings`;
-            scanStatus.className = "status-tag";
-            scanStatus.style.backgroundColor = "rgba(255, 183, 3, 0.2)";
-            scanStatus.style.color = "var(--cyber-yellow)";
-            scanStatus.style.border = "1px solid var(--cyber-yellow)";
-        } else {
-            scanStatus.textContent = "Info Alerts";
-            scanStatus.className = "status-tag";
-            scanStatus.style.backgroundColor = "rgba(0, 229, 255, 0.2)";
-            scanStatus.style.color = "var(--cyber-cyan)";
-            scanStatus.style.border = "1px solid var(--cyber-cyan)";
+        // Draw grid lines (retro backdrop)
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
+        ctx.lineWidth = 1;
+        for (let x = 0; x < canvas.width; x += 30) {
+            ctx.beginPath();
+            ctx.moveTo(x, 0);
+            ctx.lineTo(x, canvas.height);
+            ctx.stroke();
         }
+        for (let y = 0; y < canvas.height; y += 30) {
+            ctx.beginPath();
+            ctx.moveTo(0, y);
+            ctx.lineTo(canvas.width, y);
+            ctx.stroke();
+        }
+        
+        // Draw Player Ship / Platform
+        ctx.fillStyle = overloadMode ? '#ff0055' : '#00ff66';
+        // Pixel style double border
+        ctx.fillRect(player.x, player.y, player.width, player.height);
+        ctx.fillStyle = '#000';
+        ctx.fillRect(player.x + 4, player.y + 4, player.width - 8, player.height - 8);
+        ctx.fillStyle = overloadMode ? '#ff0055' : '#00ff66';
+        ctx.fillRect(player.x + 8, player.y + 2, player.width - 16, player.height - 4);
+        
+        // Label ANSH inside player block
+        ctx.fillStyle = '#fff';
+        ctx.font = '8px Courier New';
+        ctx.fillText('ANSH', player.x + (player.width / 2) - 10, player.y + 9);
 
-        // Print details
-        findings.forEach(f => {
-            const row = document.createElement('div');
-            let severityClass = 'finding-info';
-            let labelBadgeColor = 'text-muted';
-            
-            if (f.severity === 'HIGH') {
-                severityClass = 'finding-high';
-                labelBadgeColor = 'text-cyan'; /* in overclock mode this shifts automatically to alert colors */
-            } else if (f.severity === 'MEDIUM') {
-                severityClass = 'finding-medium';
-                labelBadgeColor = 'text-yellow';
-            } else if (f.severity === 'LOW') {
-                severityClass = 'finding-low';
-                labelBadgeColor = 'text-cyan';
+        // Draw Projectiles
+        projectiles.forEach(p => {
+            if (p.isFirewall) {
+                // Draw red firewall block
+                ctx.fillStyle = '#ff3366';
+                ctx.fillRect(p.x, p.y, p.width, p.height);
+                ctx.fillStyle = '#000';
+                ctx.fillRect(p.x + 4, p.y + 4, p.width - 8, p.height - 8);
+                // Core
+                ctx.fillStyle = '#ff3366';
+                ctx.fillRect(p.x + 8, p.y + 8, p.width - 16, p.height - 16);
+            } else {
+                // Draw green bug block (spider shape mock-pixel)
+                ctx.fillStyle = '#00ff66';
+                ctx.fillRect(p.x + 4, p.y + 4, 12, 12);
+                // Legs
+                ctx.fillRect(p.x, p.y + 2, 4, 2);
+                ctx.fillRect(p.x + 16, p.y + 2, 4, 2);
+                ctx.fillRect(p.x, p.y + 8, 4, 2);
+                ctx.fillRect(p.x + 16, p.y + 8, 4, 2);
+                ctx.fillRect(p.x, p.y + 14, 4, 2);
+                ctx.fillRect(p.x + 16, p.y + 14, 4, 2);
             }
-
-            row.className = `finding-row ${severityClass}`;
-            row.innerHTML = `
-                <div class="finding-title">
-                    <span class="${labelBadgeColor}">[${f.severity}]</span> ${escapeHtml(f.name)}
-                </div>
-                <div class="finding-desc">${escapeHtml(f.desc)}</div>
-            `;
-            scanResultsContainer.appendChild(row);
         });
+    }
 
-        playSound(audioSuccess);
+    function endGame() {
+        gameRunning = false;
+        playAudio(audioOver);
+        
+        // High score handling
+        if (score > highscore) {
+            highscore = score;
+            localStorage.setItem('ansh_arcade_highscore', highscore.toString());
+        }
+        
+        // Update displays
+        if (finalScoreDisplay) finalScoreDisplay.textContent = score;
+        if (highScoreDisplay) highScoreDisplay.textContent = highscore;
+        
+        screenGame.classList.remove('active-screen');
+        screenGameOver.classList.add('active-screen');
+    }
+
+    // Bind Button Clicks to Start
+    if (btnInsertCoin) {
+        btnInsertCoin.addEventListener('click', startGame);
+    }
+    if (btnGameRetry) {
+        btnGameRetry.addEventListener('click', startGame);
     }
 });
