@@ -1737,6 +1737,69 @@ button {
     background: #020204;
 }
 
+.ps2-game-iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    z-index: 4;
+    background: #000000;
+    display: none;
+}
+
+.ps2-game-iframe.active {
+    display: block;
+}
+
+.ps2-rom-player {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(10, 8, 12, 0.95);
+    padding: 2rem;
+}
+
+.rom-drop-box {
+    width: 100%;
+    max-width: 420px;
+    border: 2px dashed rgba(225, 29, 72, 0.45);
+    border-radius: var(--radius-lg);
+    background: rgba(225, 29, 72, 0.06);
+    padding: 2.2rem 1.5rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.9rem;
+    transition: var(--ease-spring) 0.2s;
+}
+
+.rom-drop-box:hover, .rom-drop-box.dragover {
+    border-color: var(--accent-red);
+    background: rgba(225, 29, 72, 0.14);
+    transform: scale(1.02);
+}
+
+.rom-drop-icon {
+    font-size: 2.6rem;
+    color: var(--accent-scarlet);
+}
+
+.rom-drop-box h4 {
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    color: #ffffff;
+}
+
+.rom-drop-box p {
+    font-size: 0.84rem;
+    color: var(--text-secondary);
+}
+
 .ps2-screen-scanlines {
     position: absolute;
     inset: 0;
