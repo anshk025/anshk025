@@ -1,142 +1,117 @@
 <div align="center">
 
-<!-- Typing animation banner -->
-<img src="https://readme-typing-svg.demolab.com?font=Press+Start+2P&size=20&duration=3000&pause=1000&color=39FF14&center=true&vCenter=true&width=600&height=60&lines=%3E+ANSH.EXE;%3E+PENTESTER;%3E+VIBECODER;%3E+AUTOMATER" alt="Typing SVG" />
+<!-- Crimson & Obsidian Dynamic Header Banner -->
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:060608,60:1a0b12,100:e11d48&height=220&section=header&text=ANSH%20KUMAR&fontSize=48&fontColor=ffffff&fontAlignY=38&desc=Security%20Researcher%20%7C%20Systems%20Engineer%20%7C%20ECE-ACT%20@%20MAIT%20Delhi&descAlignY=60&descColor=ff758f&animation=fadeIn" width="100%" alt="Ansh Kumar Banner" />
 
-<br/>
+<!-- Dynamic Typing SVG Headline -->
+<a href="https://github.com/anshk025">
+  <img src="https://readme-typing-svg.demolab.com?font=Merriweather&size=18&duration=3000&pause=1000&color=FF4D6D&center=true&vCenter=true&width=700&lines=AI+Agent+Security+%26+MCP+AST+Fuzzing;Low-Level+Systems+%26+Win32+Engineering;High-Concurrency+Python+%26+Threat+Automation;B.Tech+ECE-ACT+%40+MAIT+Delhi" alt="Typing Headline" />
+</a>
 
-![Header](https://capsule-render.vercel.app/api?type=waving&color=0:0F172A,100:1E293B&height=200&section=header&text=PLAYER%201%20%7C%20ANSH&fontSize=42&fontColor=39FF14&fontAlignY=38&desc=Pentest%20Bug-Hunter%20%7C%20ECE-ACT%20%7C%20MAIT%20Delhi&descAlignY=58&descColor=00E5FF&animation=fadeIn)
+<p align="center">
+  <a href="https://github.com/anshk025"><img src="https://img.shields.io/badge/GitHub-anshk025-060608?style=flat-square&logo=github&logoColor=white&borderColor=e11d48" alt="GitHub" /></a>
+  <a href="mailto:ansh.kumar19025@gmail.com"><img src="https://img.shields.io/badge/Email-ansh.kumar19025%40gmail.com-e11d48?style=flat-square&logo=gmail&logoColor=white" alt="Email" /></a>
+  <img src="https://img.shields.io/badge/Focus-AI%20Agent%20Security%20%26%20Systems-1a0b12?style=flat-square&color=e11d48" alt="Focus" />
+  <img src="https://img.shields.io/badge/Institution-MAIT%20Delhi-060608?style=flat-square&color=ff4d6d" alt="MAIT Delhi" />
+</p>
 
 </div>
 
-<br/>
+---
 
-## 🕹️ PLAYER PROFILE
+### 🛡️ About Me
 
-```yaml
-class:        ECE-ACT Student (Advanced Communication Technology)
-guild:        Maharaja Agrasen Institute of Technology (MAIT), Delhi
-level:        2nd Year, B.Tech
-spawn_point:  New Delhi, India
-current_hp:   100/100
-mana:         Scripting & Automation
+> *"Understand the foundational architecture, analyze protocols from the ground up, and build automated tooling to secure complex systems."*
+
+I am a 2nd-year **Electronics & Communication Engineering (Advanced Communication Technology)** student at **Maharaja Agrasen Institute of Technology (MAIT), Delhi**. My engineering interests span **AI agent security (MCP fuzzing)**, **threat automation daemons**, and **low-level systems engineering**.
+
+- 🔭 **Current Focus**: Researching runtime vulnerabilities in **Model Context Protocol (MCP)** toolchains and architecting automated scanners for LLM agent security.
+- ⚡ **Engineering Principles**: Building bespoke Python, C++, and Bash tooling from first principles rather than relying solely on black-box utilities.
+- 📡 **Hardware & Protocols**: Exploring microcontroller firmware (ESP32), network packet analysis (Wireshark), and RF transmission characteristics.
+
+---
+
+### ⚔️ Featured Repositories & Engineering Work
+
+| Project | Domain | Architecture & Highlights | Repository |
+| :--- | :---: | :--- | :---: |
+| **MCP Sentinel** | `AI Security` | Dynamic AST fuzzer and security scanner for Model Context Protocol (MCP) servers. Detects RCE, SSRF, tool poisoning, and Unicode tag smuggling in autonomous LLM agents. | [Explore Repo](https://github.com/anshk025) |
+| [**evil-ai (VADER-GEM)**](https://github.com/anshk025/evil-ai) | `AI Systems` | Production-ready Telegram AI engine leveraging OpenRouter & NVIDIA Nemotron with dynamic persona orchestration, streaming responses, and per-user memory in Docker. | [![Repo](https://img.shields.io/badge/evil--ai-e11d48?style=flat-square&logo=github)](https://github.com/anshk025/evil-ai) |
+| **Portable Crosshair-X** | `Systems` | High-performance Windows utility built via Win32 DLL injection, GDI/DirectX overlay emulation, and low-latency rendering loops. | [Explore Repo](https://github.com/anshk025) |
+| [**vaderstore**](https://github.com/anshk025/vaderstore) | `Backend` | Riot Games OAuth client & Flask web app for live daily store rotation, VP/RP balance telemetry, and Night Market tracking. | [![Repo](https://img.shields.io/badge/vaderstore-e11d48?style=flat-square&logo=github)](https://github.com/anshk025/vaderstore) |
+| [**cafe-hunter**](https://github.com/anshk025/cafe-hunter) | `Automation` | Automated reconnaissance worker daemon monitoring target platforms for security vulnerability disclosures and alerts. | [![Repo](https://img.shields.io/badge/cafe--hunter-e11d48?style=flat-square&logo=github)](https://github.com/anshk025/cafe-hunter) |
+
+---
+
+### 💻 Technical Stack & Tooling
+
+<div align="center">
+
+```
+┌─────────────────────────┬────────────────────────────────────────────────────────┐
+│ Category                │ Technologies & Frameworks                              │
+├─────────────────────────┼────────────────────────────────────────────────────────┤
+│ Languages               │ Python, C/C++, Bash, SQL, JavaScript (ES6+), HTML5/CSS3│
+│ Security & Analysis     │ MCP Toolchain Fuzzing, Wireshark, AST Parsing, Nmap    │
+│ Systems & Infrastructure│ Linux / POSIX, Docker, Git, Win32 APIs, Microcontrollers│
+│ Backend & Web           │ Flask, REST APIs, OAuth 2.0, Asyncio, WebSockets       │
+└─────────────────────────┴────────────────────────────────────────────────────────┘
 ```
 
-> *"Understand the logic behind vulnerabilities, analyze the architecture, and automate the solution. Never just memorize tools."*
-
-I'm an ECE-ACT student who lives at the intersection of **hardware, networks, and offensive security**. My focus is on **cybersecurity, penetration testing, and automation** — instead of relying on off-the-shelf scanners, I build custom **Python & Bash** tooling tailored to the target system.
-
 <br/>
 
-## 📊 STAT BARS
-
-<div align="center">
-
-| Stat | Bar | Score |
-|:--|:--|:--:|
-| ❤️ HP `[HEALTH]` | ![](https://progress-bar.xyz/100/?width=250&color=ff4d4d) | 100/100 |
-| 🔷 MP `[SCRIPTING]` | ![](https://progress-bar.xyz/95/?width=250&color=3b82f6) | 95/100 |
-| ⚔️ ATK `[OFFENSIVE]` | ![](https://progress-bar.xyz/82/?width=250&color=facc15) | 82/100 |
-| 🛡️ DEF `[PHISHING]` | ![](https://progress-bar.xyz/80/?width=250&color=22c55e) | 80/100 |
-| 💨 AGI `[AUTOMATE]` | ![](https://progress-bar.xyz/90/?width=250&color=06b6d4) | 90/100 |
+<img src="https://skillicons.dev/icons?i=python,c,cpp,bash,linux,docker,git,github,vscode,flask,js&theme=dark" alt="Skill Icons" />
 
 </div>
 
-<br/>
+---
 
-## 🎒 INVENTORY // TECH STACK
+### 📊 GitHub Activity & Telemetry
 
 <div align="center">
 
-<img src="https://skillicons.dev/icons?i=python,bash,linux,git,docker,flask,cpp,c,vscode,github&theme=dark" />
-
-</div>
-
-<table align="center">
-<tr>
-<td width="25%" valign="top">
-
-**🐍 Python Blade**
-`LVL 90 · Weapon`
-
-Multi-threaded scanners, async OSINT harvesters, API scripting.
-
-</td>
-<td width="25%" valign="top">
-
-**💻 Bash Shield**
-`LVL 85 · Shield`
-
-Server automation, directory sweeps, cron security checks, target audits.
-
-</td>
-<td width="25%" valign="top">
-
-**🕸️ Web Sec Scroll**
-`LVL 80 · Spell`
-
-Logic-parameter analysis, session hijack defense, XSS auditing, secure headers.
-
-</td>
-<td width="25%" valign="top">
-
-**📡 RF Transmitter**
-`LVL 75 · Artifact`
-
-Hardware interfacing, Wi-Fi packet inspection, wireless & comms security.
-
-</td>
-</tr>
+<table border="0">
+  <tr>
+    <td align="center" width="50%">
+      <img src="https://github-readme-stats.vercel.app/api?username=anshk025&show_icons=true&bg_color=060608&title_color=ff4d6d&text_color=cbd5e1&icon_color=e11d48&border_color=2b141d&count_private=true&include_all_commits=true" width="100%" alt="GitHub Stats" />
+    </td>
+    <td align="center" width="50%">
+      <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=anshk025&layout=compact&bg_color=060608&title_color=ff4d6d&text_color=cbd5e1&border_color=2b141d" width="100%" alt="Top Languages" />
+    </td>
+  </tr>
+  <tr>
+    <td align="center" colspan="2">
+      <img src="https://github-readme-streak-stats.herokuapp.com/?user=anshk025&background=060608&ring=e11d48&fire=ff4d6d&currStreakLabel=ff758f&border=2b141d&stroke=3b1219" width="98%" alt="GitHub Streak" />
+    </td>
+  </tr>
 </table>
 
-<br/>
-
-## 📜 ACTIVE QUEST LOG
-
-<div align="center">
-
-| Status | Quest | Description | Reward | Repo |
-|:--:|:--|:--|:--|:--:|
-| 🟡 `IN PROGRESS` | **evil-ai** (VADER-GEM) | Production-ready AI Telegram chatbot with custom personalities, streaming responses, per-user memory. | OpenRouter (NVIDIA Nemotron) bot in Docker | [![GitHub](https://img.shields.io/badge/repo-181717?style=flat-square&logo=github)](https://github.com/anshk025/evil-ai) |
-| 🟢 `COMPLETE` | **cafe-hunter** | Automated Discord assistant that monitors codebase platforms and scans for vulnerability alerts. | Python worker mapping target bugs | [![GitHub](https://img.shields.io/badge/repo-181717?style=flat-square&logo=github)](https://github.com/anshk025/cafe-hunter) |
-| 🟢 `COMPLETE` | **vaderstore** | Checks daily Valorant store logs, balances & night markets via OAuth. | Flask dashboard, one-command Railway deploy | [![GitHub](https://img.shields.io/badge/repo-181717?style=flat-square&logo=github)](https://github.com/anshk025/vaderstore) |
-| 🟢 `COMPLETE` | **encBot** | Utility bot for encrypting Python scripts to shield IP. | Telegram bot with payload encryption routines | [![GitHub](https://img.shields.io/badge/repo-181717?style=flat-square&logo=github)](https://github.com/anshk025/encBot) |
-
 </div>
 
-<br/>
+---
 
-## 📈 SYSTEM LOGS // GITHUB STATS
-
-<div align="center">
-
-<img height="165" src="https://github-readme-stats.vercel.app/api?username=anshk025&show_icons=true&theme=radical&hide_border=true&bg_color=0F172A&title_color=39FF14&icon_color=00E5FF&text_color=ffffff" />
-<img height="165" src="https://github-readme-stats.vercel.app/api/top-langs/?username=anshk025&layout=compact&theme=radical&hide_border=true&bg_color=0F172A&title_color=39FF14&text_color=ffffff" />
-
-<br/>
-
-<img src="https://github-readme-streak-stats.herokuapp.com/?user=anshk025&theme=radical&hide_border=true&background=0F172A&ring=39FF14&fire=facc15&currStreakLabel=00E5FF" />
-
-</div>
-
-<br/>
-
-## 🔌 INSERT COIN TO CONNECT
+### 📬 Connect With Me
 
 <div align="center">
 
-[![GitHub](https://img.shields.io/badge/GitHub-anshk025-181717?style=for-the-badge&logo=github)](https://github.com/anshk025)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0A66C2?style=for-the-badge&logo=linkedin)](https://linkedin.com)
-[![Email](https://img.shields.io/badge/Email-ansh.kumar19025%40gmail.com-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:ansh.kumar19025@gmail.com)
+<a href="https://github.com/anshk025">
+  <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub" />
+</a>
+&nbsp;&nbsp;
+<a href="mailto:ansh.kumar19025@gmail.com">
+  <img src="https://img.shields.io/badge/Email-e11d48?style=for-the-badge&logo=gmail&logoColor=white" alt="Email" />
+</a>
+&nbsp;&nbsp;
+<a href="https://linkedin.com">
+  <img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" />
+</a>
 
-</div>
+<br/><br/>
+
+<sub>© 2026 Ansh Kumar • B.Tech ECE-ACT @ Maharaja Agrasen Institute of Technology, Delhi</sub>
 
 <br/>
 
-<div align="center">
-
-`INSERT COIN TO SAVE STATE █▓▒░`
-
-![Footer](https://capsule-render.vercel.app/api?type=waving&color=0:1E293B,100:0F172A&height=100&section=footer)
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:e11d48,40:1a0b12,100:060608&height=80&section=footer" width="100%" alt="Footer Banner" />
 
 </div>
