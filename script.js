@@ -90,7 +90,8 @@ document.addEventListener('DOMContentLoaded', () => {
     actionSwitchBtns.forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.preventDefault();
-            const target = parseInt(btn.dataset.target, 10);
+            const targetVal = btn.dataset.page ?? btn.dataset.target;
+            const target = parseInt(targetVal, 10);
             if (!isNaN(target)) {
                 switchPage(target);
             }
@@ -142,25 +143,27 @@ document.addEventListener('DOMContentLoaded', () => {
         updatePillPosition(currentPage);
     });
 
-    // 2. Email Copy-to-Clipboard Action
-    const btnCopyEmail = document.getElementById('btn-copy-email');
-    if (btnCopyEmail) {
-        btnCopyEmail.addEventListener('click', () => {
-            const email = btnCopyEmail.getAttribute('data-clipboard');
-            if (email && navigator.clipboard) {
-                navigator.clipboard.writeText(email).then(() => {
-                    btnCopyEmail.innerHTML = '<i class="fa-solid fa-check text-accent"></i>';
-                    btnCopyEmail.title = "Copied to clipboard!";
+    // 2. Email Copy-to-Clipboard Action (Handles all .btn-copy buttons)
+    const copyBtns = document.querySelectorAll('.btn-copy');
+    copyBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const textToCopy = btn.getAttribute('data-clipboard');
+            if (textToCopy && navigator.clipboard) {
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    const originalHtml = btn.innerHTML;
+                    const originalTitle = btn.title;
+                    btn.innerHTML = '<i class="fa-solid fa-check text-accent"></i>';
+                    btn.title = "Copied to clipboard!";
                     setTimeout(() => {
-                        btnCopyEmail.innerHTML = '<i class="fa-regular fa-copy"></i>';
-                        btnCopyEmail.title = "Copy to clipboard";
+                        btn.innerHTML = originalHtml;
+                        btn.title = originalTitle;
                     }, 2000);
                 }).catch(err => {
                     console.error("Clipboard copy failed", err);
                 });
             }
         });
-    }
+    });
 
     // ==========================================================================
     // 3. SEKIRO FLOATING CRIMSON EMBERS (GPU HTML5 CANVAS)

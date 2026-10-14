@@ -102,7 +102,7 @@ I am a 2nd-year **Electronics & Communication Engineering (Advanced Communicatio
   <img src="https://img.shields.io/badge/Email-e11d48?style=for-the-badge&logo=gmail&logoColor=white" alt="Email" />
 </a>
 &nbsp;&nbsp;
-<a href="https://linkedin.com">
+<a href="https://www.linkedin.com/in/anshk025">
   <img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" />
 </a>
 

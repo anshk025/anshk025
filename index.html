@@ -28,9 +28,7 @@
 
     <!-- Sekiro Moonlight Waterfall Video Background (Always Active) -->
     <div class="video-bg-container" aria-hidden="true">
-        <video id="bg-video" class="bg-video-stream" autoplay loop muted playsinline preload="auto" src="bg.mp4">
-            <source src="bg.mp4" type="video/mp4">
-        </video>
+        <video id="bg-video" class="bg-video-stream" autoplay loop muted playsinline preload="auto" src="bg.mp4"></video>
         <div class="video-overlay-tint"></div>
         <canvas id="sekiro-embers" class="sekiro-embers-canvas"></canvas>
     </div>
@@ -82,7 +80,7 @@
                 </a>
 
                 <!-- Small Profile Photo at Top Right -->
-                <div class="top-right-profile-chip action-switch-page" data-target="0" title="Ansh Kumar • B.Tech ECE-ACT MAIT">
+                <div class="top-right-profile-chip action-switch-page" data-page="0" title="Ansh Kumar • B.Tech ECE-ACT MAIT">
                     <img src="me.png" alt="Ansh Kumar" class="top-right-avatar-img">
                     <span class="avatar-ring-pulse"></span>
                 </div>
@@ -117,7 +115,7 @@
                         </p>
 
                         <div class="hero-cta-row">
-                            <button class="glass-btn glass-btn-accent action-switch-page" data-target="1">
+                            <button class="glass-btn glass-btn-accent action-switch-page" data-page="1">
                                 <span>Explore Projects</span>
                                 <i class="fa-solid fa-arrow-right"></i>
                             </button>
@@ -125,7 +123,7 @@
                                 <i class="fa-solid fa-file-pdf"></i>
                                 <span>Download Resume (PDF)</span>
                             </a>
-                            <button class="glass-btn glass-btn-ghost action-switch-page" data-target="4">
+                            <button class="glass-btn glass-btn-ghost action-switch-page" data-page="4">
                                 <span>Get in Touch</span>
                             </button>
                         </div>
@@ -170,7 +168,7 @@
                                 </div>
                                 <div class="telemetry-row">
                                     <span class="t-key">DEGREE</span>
-                                    <span class="t-val">B.Tech ECE-ACT (2024-2029)</span>
+                                    <span class="t-val">B.Tech ECE-ACT (2025-2029)</span>
                                 </div>
                                 <div class="telemetry-row">
                                     <span class="t-key">FLAGSHIP</span>
@@ -186,7 +184,7 @@
                                 </div>
                             </div>
                             <div class="telemetry-footer">
-                                <button class="glass-btn glass-btn-secondary btn-sm action-switch-page full-width" data-target="1">
+                                <button class="glass-btn glass-btn-secondary btn-sm action-switch-page full-width" data-page="1">
                                     <span>View System Blueprints</span>
                                     <i class="fa-solid fa-chevron-right"></i>
                                 </button>
@@ -526,7 +524,7 @@
                                 <h3>Maharaja Agrasen Institute of Technology (MAIT)</h3>
                                 <p class="edu-affil">Guru Gobind Singh Indraprastha University (GGSIPU), New Delhi</p>
                             </div>
-                            <span class="edu-timeframe">2024 — 2029 (Expected)</span>
+                            <span class="edu-timeframe">2025 — 2029 (Expected)</span>
                         </div>
 
                         <div class="edu-degree-details">
@@ -605,14 +603,26 @@
                         </p>
 
                         <div class="direct-methods-list">
-                            <!-- Email -->
+                            <!-- Primary Email -->
                             <div class="contact-item">
                                 <div class="c-icon"><i class="fa-solid fa-envelope"></i></div>
+                                <div class="c-details">
+                                    <span class="c-label">Primary Email</span>
+                                    <a href="mailto:ansh.kumar19025@gmail.com" class="c-value">ansh.kumar19025@gmail.com</a>
+                                </div>
+                                <button class="btn-copy" id="btn-copy-email" data-clipboard="ansh.kumar19025@gmail.com" title="Copy to clipboard">
+                                    <i class="fa-regular fa-copy"></i>
+                                </button>
+                            </div>
+
+                            <!-- Institutional Email -->
+                            <div class="contact-item">
+                                <div class="c-icon"><i class="fa-solid fa-graduation-cap"></i></div>
                                 <div class="c-details">
                                     <span class="c-label">Institutional Email</span>
                                     <a href="mailto:ansh.02014815925@ecact.mait.ac.in" class="c-value">ansh.02014815925@ecact.mait.ac.in</a>
                                 </div>
-                                <button class="btn-copy" id="btn-copy-email" data-clipboard="ansh.02014815925@ecact.mait.ac.in" title="Copy to clipboard">
+                                <button class="btn-copy" data-clipboard="ansh.02014815925@ecact.mait.ac.in" title="Copy to clipboard">
                                     <i class="fa-regular fa-copy"></i>
                                 </button>
                             </div>
@@ -668,10 +678,10 @@
                                 <i class="fa-solid fa-arrow-up-right-from-square arrow-ext"></i>
                             </a>
 
-                            <a href="https://linkedin.com" target="_blank" class="social-row-link">
+                            <a href="https://www.linkedin.com/in/anshk025" target="_blank" class="social-row-link">
                                 <div class="s-icon"><i class="fa-brands fa-linkedin"></i></div>
                                 <div class="s-info">
-                                    <span class="s-title">LinkedIn</span>
+                                    <span class="s-title">LinkedIn // @anshk025</span>
                                     <span class="s-desc">Professional updates and academic milestones</span>
                                 </div>
                                 <i class="fa-solid fa-arrow-up-right-from-square arrow-ext"></i>
