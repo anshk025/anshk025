@@ -18,6 +18,9 @@
     <!-- FontAwesome Pro Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
+    <!-- Favicon: Sekiro Crimson Mon Seal -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%23060608' stroke='%23e11d48' stroke-width='2'/%3E%3Ctext x='16' y='22' font-size='16' text-anchor='middle' fill='%23ff4d6d' font-family='serif'%3E死%3C/text%3E%3C/svg%3E">
+
     <!-- Design System Stylesheet -->
     <link rel="stylesheet" href="style.css">
 </head>
@@ -29,6 +32,7 @@
             <source src="bg.mp4" type="video/mp4">
         </video>
         <div class="video-overlay-tint"></div>
+        <canvas id="sekiro-embers" class="sekiro-embers-canvas"></canvas>
     </div>
 
     <!-- Apple VisionOS Floating Glass Navigation Bar -->
@@ -64,6 +68,12 @@
 
             <!-- Top-Right Actions + Small User Profile Photo -->
             <div class="nav-actions">
+                <button class="glass-btn-icon cmd-trigger-btn" id="btn-open-cmd" title="Command Palette & PS2 Vault (Ctrl + K)">
+                    <i class="fa-solid fa-terminal"></i>
+                </button>
+                <button class="glass-btn-icon death-trigger-btn" id="btn-trigger-death-nav" title="Sekiro Death Screen (D)">
+                    <span class="kanji-seal-nav">死</span>
+                </button>
                 <a href="Resume/Ansh_Kumar.pdf" target="_blank" class="glass-btn glass-btn-primary" title="Open Resume PDF">
                     <i class="fa-solid fa-file-arrow-down"></i> <span>Resume</span>
                 </a>
@@ -690,11 +700,307 @@
                 <span class="f-name">Ansh Kumar</span>
                 <span class="f-sub">B.Tech ECE-ACT • MAIT Delhi</span>
             </div>
+            <div class="footer-center">
+                <button class="footer-cmd-pill" id="footer-open-cmd">
+                    <i class="fa-solid fa-terminal text-accent"></i> <span>Command Vault</span> <kbd>Ctrl + K</kbd>
+                </button>
+            </div>
             <div class="footer-right">
                 <span>&copy; 2026 Ansh Kumar. Engineered with clean systems design.</span>
             </div>
         </div>
     </footer>
+
+    <!-- ================= MODALS & OVERLAYS ================= -->
+
+    <!-- 1. VisionOS Liquid Glass Command Palette (Ctrl + K) -->
+    <div class="cmd-palette-backdrop" id="cmd-palette-backdrop" aria-hidden="true">
+        <div class="cmd-palette-modal glass-panel" role="dialog" aria-modal="true" aria-labelledby="cmd-search-input">
+            <div class="cmd-palette-header">
+                <i class="fa-solid fa-magnifying-glass cmd-search-icon"></i>
+                <input type="text" id="cmd-search-input" class="cmd-search-input" placeholder="Search commands, PS2 retro games, tools, or navigation... (Ctrl + K)" autocomplete="off" spellcheck="false">
+                <kbd class="cmd-esc-badge" id="cmd-close-badge">ESC</kbd>
+            </div>
+            
+            <div class="cmd-palette-body" id="cmd-palette-results">
+                <!-- Group 1: PS2 Retro Classics -->
+                <div class="cmd-group" data-category="ps2">
+                    <div class="cmd-group-title"><i class="fa-solid fa-gamepad text-accent"></i> PS2 RETRO CLASSICS & VAULT</div>
+                    
+                    <div class="cmd-item" data-action="ps2-game" data-game-id="dmc3">
+                        <div class="cmd-item-icon"><i class="fa-solid fa-fire text-accent"></i></div>
+                        <div class="cmd-item-content">
+                            <span class="cmd-item-title">Devil May Cry 3: Dante's Awakening</span>
+                            <span class="cmd-item-desc">Capcom (2005) • Hack & Slash / Stylish Action</span>
+                        </div>
+                        <span class="cmd-item-badge">PS2 CLASSIC</span>
+                    </div>
+
+                    <div class="cmd-item" data-action="ps2-game" data-game-id="sotc">
+                        <div class="cmd-item-icon"><i class="fa-solid fa-mountain text-accent"></i></div>
+                        <div class="cmd-item-content">
+                            <span class="cmd-item-title">Shadow of the Colossus</span>
+                            <span class="cmd-item-desc">Team Ico (2005) • Atmospheric Action Adventure</span>
+                        </div>
+                        <span class="cmd-item-badge">PS2 CLASSIC</span>
+                    </div>
+
+                    <div class="cmd-item" data-action="ps2-game" data-game-id="tekken5">
+                        <div class="cmd-item-icon"><i class="fa-solid fa-hand-fist text-accent"></i></div>
+                        <div class="cmd-item-content">
+                            <span class="cmd-item-title">Tekken 5</span>
+                            <span class="cmd-item-desc">Namco (2005) • Premier 3D Arcade Fighting</span>
+                        </div>
+                        <span class="cmd-item-badge">PS2 CLASSIC</span>
+                    </div>
+
+                    <div class="cmd-item" data-action="ps2-game" data-game-id="mgs3">
+                        <div class="cmd-item-icon"><i class="fa-solid fa-shield-halved text-accent"></i></div>
+                        <div class="cmd-item-content">
+                            <span class="cmd-item-title">Metal Gear Solid 3: Snake Eater</span>
+                            <span class="cmd-item-desc">Konami (2004) • Tactical Espionage Action</span>
+                        </div>
+                        <span class="cmd-item-badge">PS2 CLASSIC</span>
+                    </div>
+
+                    <div class="cmd-item" data-action="ps2-game" data-game-id="gow2">
+                        <div class="cmd-item-icon"><i class="fa-solid fa-bolt text-accent"></i></div>
+                        <div class="cmd-item-content">
+                            <span class="cmd-item-title">God of War II</span>
+                            <span class="cmd-item-desc">Santa Monica Studio (2007) • Mythological Hack & Slash</span>
+                        </div>
+                        <span class="cmd-item-badge">PS2 CLASSIC</span>
+                    </div>
+
+                    <div class="cmd-item" data-action="ps2-game" data-game-id="re4">
+                        <div class="cmd-item-icon"><i class="fa-solid fa-biohazard text-accent"></i></div>
+                        <div class="cmd-item-content">
+                            <span class="cmd-item-title">Resident Evil 4</span>
+                            <span class="cmd-item-desc">Capcom (2005) • Survival Horror Legend</span>
+                        </div>
+                        <span class="cmd-item-badge">PS2 CLASSIC</span>
+                    </div>
+
+                    <div class="cmd-item" data-action="ps2-game" data-game-id="nfsmw">
+                        <div class="cmd-item-icon"><i class="fa-solid fa-car text-accent"></i></div>
+                        <div class="cmd-item-content">
+                            <span class="cmd-item-title">Need for Speed: Most Wanted</span>
+                            <span class="cmd-item-desc">EA Black Box (2005) • Blacklist #1 Street Racing</span>
+                        </div>
+                        <span class="cmd-item-badge">PS2 CLASSIC</span>
+                    </div>
+
+                    <div class="cmd-item" data-action="ps2-game" data-game-id="sekiro-arcade">
+                        <div class="cmd-item-icon"><i class="fa-solid fa-dragon text-accent"></i></div>
+                        <div class="cmd-item-content">
+                            <span class="cmd-item-title">Sekiro: Shadow Blade (Retro Demake)</span>
+                            <span class="cmd-item-desc">Interactive 16-Bit Parrying Duel Arena • Instant Playable</span>
+                        </div>
+                        <span class="cmd-item-badge badge-playable">PLAY NOW</span>
+                    </div>
+                </div>
+
+                <!-- Group 2: Navigation -->
+                <div class="cmd-group" data-category="nav">
+                    <div class="cmd-group-title"><i class="fa-solid fa-compass text-accent"></i> NAVIGATION</div>
+                    
+                    <div class="cmd-item" data-action="nav" data-page="0">
+                        <div class="cmd-item-icon"><i class="fa-solid fa-house"></i></div>
+                        <div class="cmd-item-content">
+                            <span class="cmd-item-title">Go to Overview</span>
+                            <span class="cmd-item-desc">Profile, engineering telemetry, and core pillars</span>
+                        </div>
+                        <kbd class="cmd-kbd">1</kbd>
+                    </div>
+
+                    <div class="cmd-item" data-action="nav" data-page="1">
+                        <div class="cmd-item-icon"><i class="fa-solid fa-layer-group"></i></div>
+                        <div class="cmd-item-content">
+                            <span class="cmd-item-title">Go to Projects</span>
+                            <span class="cmd-item-desc">MCP Sentinel, evil-ai, Portable Crosshair-X, vaderstore</span>
+                        </div>
+                        <kbd class="cmd-kbd">2</kbd>
+                    </div>
+
+                    <div class="cmd-item" data-action="nav" data-page="2">
+                        <div class="cmd-item-icon"><i class="fa-solid fa-code"></i></div>
+                        <div class="cmd-item-content">
+                            <span class="cmd-item-title">Go to Technical Stack</span>
+                            <span class="cmd-item-desc">Languages, security tooling, Linux, Docker, hardware</span>
+                        </div>
+                        <kbd class="cmd-kbd">3</kbd>
+                    </div>
+
+                    <div class="cmd-item" data-action="nav" data-page="3">
+                        <div class="cmd-item-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+                        <div class="cmd-item-content">
+                            <span class="cmd-item-title">Go to Education</span>
+                            <span class="cmd-item-desc">MAIT Delhi • B.Tech ECE-ACT curriculum and research</span>
+                        </div>
+                        <kbd class="cmd-kbd">4</kbd>
+                    </div>
+
+                    <div class="cmd-item" data-action="nav" data-page="4">
+                        <div class="cmd-item-icon"><i class="fa-solid fa-envelope"></i></div>
+                        <div class="cmd-item-content">
+                            <span class="cmd-item-title">Go to Contact</span>
+                            <span class="cmd-item-desc">Direct email, GitHub, LinkedIn, channels</span>
+                        </div>
+                        <kbd class="cmd-kbd">5</kbd>
+                    </div>
+                </div>
+
+                <!-- Group 3: Sekiro Protocols -->
+                <div class="cmd-group" data-category="easter-egg">
+                    <div class="cmd-group-title"><i class="fa-solid fa-skull text-accent"></i> SEKIRO PROTOCOLS</div>
+                    
+                    <div class="cmd-item" data-action="trigger-death">
+                        <div class="cmd-item-icon"><i class="fa-solid fa-droplet text-accent"></i></div>
+                        <div class="cmd-item-content">
+                            <span class="cmd-item-title">Trigger "死" (Death Screen Easter Egg)</span>
+                            <span class="cmd-item-desc">Cinematic calligraphy screen with "回生" resurrection chime</span>
+                        </div>
+                        <kbd class="cmd-kbd">D</kbd>
+                    </div>
+
+                    <div class="cmd-item" data-action="toggle-embers">
+                        <div class="cmd-item-icon"><i class="fa-solid fa-fire-flame-curved text-accent"></i></div>
+                        <div class="cmd-item-content">
+                            <span class="cmd-item-title">Toggle Crimson Ember Storm</span>
+                            <span class="cmd-item-desc">Adjust GPU floating particle density and speed</span>
+                        </div>
+                    </div>
+
+                    <div class="cmd-item" data-action="copy-email">
+                        <div class="cmd-item-icon"><i class="fa-solid fa-paper-plane text-accent"></i></div>
+                        <div class="cmd-item-content">
+                            <span class="cmd-item-title">Copy Contact Email</span>
+                            <span class="cmd-item-desc">ansh.kumar19025@gmail.com</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cmd-palette-footer">
+                <div class="cmd-tip"><span><kbd>↑</kbd> <kbd>↓</kbd> navigate</span><span><kbd>↵</kbd> select</span><span><kbd>ESC</kbd> close</span></div>
+                <div class="cmd-branding"><i class="fa-solid fa-shield-cat text-accent"></i> VisionOS Palette</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Sony PS2 VisionOS Gaming Console Modal -->
+    <div class="ps2-modal-backdrop" id="ps2-modal-backdrop" aria-hidden="true">
+        <div class="ps2-console-container glass-panel" role="dialog" aria-modal="true">
+            <!-- PS2 Console Topbar -->
+            <div class="ps2-console-header">
+                <div class="ps2-logo-group">
+                    <span class="ps2-badge">PlayStation 2</span>
+                    <span class="ps2-status-led"><span class="led-dot led-blue"></span> DISC READ</span>
+                </div>
+                <div class="ps2-memory-card-indicator">
+                    <i class="fa-solid fa-microchip text-accent"></i> <span>SLOT 1: 8MB MAGICGATE [READY]</span>
+                </div>
+                <button class="ps2-close-btn" id="ps2-close-btn" title="Close PS2 Console">&times;</button>
+            </div>
+
+            <!-- Game Viewport and Details -->
+            <div class="ps2-game-viewport-wrap">
+                <div class="ps2-screen-frame" id="ps2-screen-frame">
+                    <!-- Retro Interactive Canvas / Game Screen -->
+                    <canvas id="ps2-retro-canvas" width="640" height="400"></canvas>
+                    <div class="ps2-screen-scanlines"></div>
+                    <div class="ps2-crt-glow"></div>
+
+                    <!-- Overlay Controls / Start prompt -->
+                    <div class="ps2-game-overlay-ui" id="ps2-overlay-ui">
+                        <div class="ps2-boot-screen" id="ps2-boot-screen">
+                            <div class="ps2-boot-text">Sony Computer Entertainment</div>
+                            <h2 class="ps2-title-display" id="ps2-game-active-title">DEVIL MAY CRY 3</h2>
+                            <p class="ps2-tagline-display" id="ps2-game-active-tagline">Dante's Awakening Special Edition</p>
+                            
+                            <div class="ps2-action-cta-group">
+                                <button class="glass-btn glass-btn-primary ps2-start-action-btn" id="ps2-btn-start-game">
+                                    <i class="fa-solid fa-play"></i> START RETRO DUEL
+                                </button>
+                            </div>
+
+                            <div class="ps2-controls-hint">
+                                <span><kbd>A</kbd>/<kbd>D</kbd> or <kbd>←</kbd><kbd>→</kbd> Move</span>
+                                <span><kbd>W</kbd> or <kbd>↑</kbd> Jump</span>
+                                <span><kbd>J</kbd> or <kbd>SPACE</kbd> Attack</span>
+                                <span><kbd>K</kbd> Parry / Deflect</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PS2 Game Specs & Metadata Sidebar -->
+                <div class="ps2-game-sidebar">
+                    <div class="ps2-meta-card">
+                        <div class="ps2-cover-banner" id="ps2-cover-banner">
+                            <div class="ps2-disc-ring"><i class="fa-solid fa-compact-disc"></i></div>
+                            <div class="ps2-cover-info">
+                                <h3 id="ps2-sidebar-title">Devil May Cry 3</h3>
+                                <span class="ps2-sidebar-genre" id="ps2-sidebar-genre">Capcom • 2005 • Action</span>
+                            </div>
+                        </div>
+                        
+                        <div class="ps2-specs-list">
+                            <div class="ps2-spec-row">
+                                <span class="p-key">PLATFORM</span>
+                                <span class="p-val">Emotion Engine @ 294MHz</span>
+                            </div>
+                            <div class="ps2-spec-row">
+                                <span class="p-key">SAVE BLOCK</span>
+                                <span class="p-val">128 KB (Memory Card 1)</span>
+                            </div>
+                            <div class="ps2-spec-row">
+                                <span class="p-key">AUDIO</span>
+                                <span class="p-val">Dolby Pro Logic II / SPU2</span>
+                            </div>
+                            <div class="ps2-spec-row">
+                                <span class="p-key">CONTROLLER</span>
+                                <span class="p-val">DualShock 2 Analog</span>
+                            </div>
+                        </div>
+
+                        <p class="ps2-game-summary" id="ps2-sidebar-desc">
+                            Legendary character action masterpiece following young Dante as he climbs the demonic tower Temen-ni-gru to confront his twin brother Vergil.
+                        </p>
+                    </div>
+
+                    <!-- PS2 Game Selection Quick Switcher -->
+                    <div class="ps2-disc-switcher">
+                        <div class="ps2-switcher-label"><i class="fa-solid fa-layer-group text-accent"></i> INSERT ANOTHER DISC:</div>
+                        <div class="ps2-disc-pills" id="ps2-disc-pills">
+                            <!-- Populated with game discs -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Sekiro Death / Resurrection Overlay Modal -->
+    <div id="sekiro-death-overlay" class="sekiro-death-overlay" aria-hidden="true">
+        <div class="death-mist-backdrop"></div>
+        <div class="death-vignette-pulse"></div>
+        <div class="death-content-container">
+            <!-- Blood Kanji Container -->
+            <div class="kanji-wrapper" id="death-kanji-box">
+                <div class="blood-kanji death-kanji" id="sekiro-kanji">死</div>
+                <div class="kanji-romanized" id="kanji-subtext">SHI • DEATH</div>
+            </div>
+            <!-- Resurrect Prompt Button -->
+            <div class="resurrect-action-box" id="resurrect-prompt">
+                <button class="resurrect-btn" id="btn-resurrect">
+                    <span class="btn-kanji">回生</span>
+                    <span class="btn-label">RESURRECT <kbd>[ SPACE ]</kbd></span>
+                </button>
+            </div>
+        </div>
+        <button class="death-close-btn" id="death-close-btn" title="Dismiss">&times;</button>
+    </div>
 
     <!-- Main Logic Script -->
     <script src="script.js"></script>
